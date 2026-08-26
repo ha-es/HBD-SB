@@ -1,0 +1,1020 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Birthday Scratch Lottery</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;700&family=Gowun+Dodum&display=swap');
+
+:root {
+  --pink: #ff73c8;
+  --blue: #55bfe7;
+  --yellow: #fff2a6;
+  --ink: #222;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  color: var(--ink);
+  font-family: "Gowun Dodum", sans-serif;
+  background: #f9f4ef;
+  overflow-x: hidden;
+}
+
+/* 상단 파란색 바 */
+.topbar {
+  height: 30px;
+  background: var(--blue);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-family: "Baloo 2", sans-serif;
+  font-size: 13px;
+  letter-spacing: 2px;
+}
+
+.topbar::after {
+  content: "✦  scratch your surprise  ✦";
+}
+
+/* 전체 */
+.site {
+  width: min(920px, 94vw);
+  margin: 0 auto 40px;
+  background: white;
+  box-shadow: 0 10px 35px rgba(55, 30, 60, .12);
+}
+
+/* 헤더 */
+header {
+  padding: 26px 24px 10px;
+  text-align: center;
+  position: relative;
+
+  background:
+    radial-gradient(circle at 5% 30%, #ff5db4 0 6px, transparent 7px),
+    radial-gradient(circle at 15% 72%, #9ce37a 0 5px, transparent 6px),
+    radial-gradient(circle at 28% 30%, #ffcf45 0 6px, transparent 7px),
+    radial-gradient(circle at 43% 68%, #8ed5f5 0 5px, transparent 6px),
+    radial-gradient(circle at 65% 30%, #ff80cf 0 6px, transparent 7px),
+    radial-gradient(circle at 82% 70%, #f5cf52 0 5px, transparent 6px),
+    #fff;
+}
+
+.brand {
+  margin: 0;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(42px, 7vw, 70px);
+  line-height: 1;
+  font-weight: 400;
+  letter-spacing: -3px;
+}
+
+/* 메뉴 */
+.nav {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin: 22px -24px 0;
+  border-top: 1px solid #eee;
+  padding-top: 9px;
+
+  font-family: "Baloo 2", sans-serif;
+  font-size: 15px;
+}
+
+.nav span {
+  padding: 5px 16px;
+}
+
+.nav .active {
+  background: var(--blue);
+  color: white;
+  transform: skew(-10deg);
+  border-radius: 2px;
+}
+
+/* 핑크 보드 */
+.board {
+  margin: 14px;
+  padding: 26px 18px 40px;
+  background: var(--pink);
+  position: relative;
+  border: 2px solid #222;
+  min-height: 760px;
+  overflow: hidden;
+}
+
+/* 별 */
+.confetti {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.confetti i {
+  position: absolute;
+  font-style: normal;
+  font-size: 25px;
+}
+
+.c1 {
+  left: 4%;
+  top: 13%;
+  color: white;
+}
+
+.c2 {
+  right: 5%;
+  top: 18%;
+  color: #e6c7ff;
+}
+
+.c3 {
+  left: 10%;
+  bottom: 12%;
+  color: #9be85d;
+}
+
+.c4 {
+  right: 8%;
+  bottom: 20%;
+  color: #ffe52e;
+}
+
+.c5 {
+  left: 47%;
+  bottom: 14%;
+  color: #d92b4d;
+}
+
+/* 제목 */
+.title {
+  width: max-content;
+  max-width: 90%;
+  margin: 0 auto 28px;
+  padding: 10px 30px;
+
+  background: var(--yellow);
+  border: 2px solid #222;
+  box-shadow: 5px 5px 0 #fff;
+
+  font-family: "Baloo 2", sans-serif;
+  font-size: 21px;
+  font-weight: 700;
+  letter-spacing: 1px;
+
+  position: relative;
+  z-index: 2;
+}
+
+.title::before {
+  content: "♥";
+  margin-right: 10px;
+  color: #e83955;
+}
+
+.title::after {
+  content: "♥";
+  margin-left: 10px;
+  color: #e83955;
+}
+
+/* 설명 */
+.instructions {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  margin: -12px auto 25px;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+/* 카드 */
+.cards {
+  position: relative;
+  z-index: 2;
+
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+
+  gap: 30px 25px;
+
+  max-width: 790px;
+  margin: 0 auto;
+}
+
+/* 각각의 카드 */
+.card {
+  position: relative;
+  transform: rotate(var(--r));
+}
+
+/* 사진 프레임 */
+.photo-frame {
+  background: #fff;
+  border: 2px solid #222;
+  padding: 9px;
+
+  box-shadow: 5px 6px 0 rgba(0, 0, 0, .15);
+
+  position: relative;
+}
+
+/* 실제 연예인 사진 */
+.photo {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+
+  object-fit: cover;
+  display: block;
+}
+
+/* 긁는 영역 */
+.scratch-wrap {
+  position: absolute;
+
+  top: 9px;
+  left: 9px;
+  right: 9px;
+  bottom: 9px;
+
+  overflow: hidden;
+
+  touch-action: none;
+  cursor: crosshair;
+}
+
+/* 긁기 전 문구 */
+.reveal {
+  position: absolute;
+  inset: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background:
+    radial-gradient(
+      circle at 20% 30%,
+      #fff 0 4px,
+      transparent 5px
+    ),
+    radial-gradient(
+      circle at 75% 65%,
+      #fff 0 4px,
+      transparent 5px
+    ),
+    linear-gradient(
+      135deg,
+      #aaa,
+      #eee,
+      #999,
+      #eee,
+      #aaa
+    );
+
+  color: #555;
+
+  font-family: "Baloo 2", sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+
+  text-align: center;
+  line-height: 1.15;
+
+  pointer-events: none;
+}
+
+/* 긁기 완료되면 가림막 제거 */
+.scratch-wrap.revealed .reveal {
+  display: none;
+}
+
+/* 복권 은박 */
+.scratch-wrap canvas {
+  position: absolute;
+  inset: 0;
+
+  width: 100%;
+  height: 100%;
+
+  z-index: 2;
+}
+
+/* 테이프 */
+.tape {
+  position: absolute;
+
+  width: 65px;
+  height: 22px;
+
+  background: rgba(255,255,255,.62);
+
+  top: -13px;
+  z-index: 5;
+}
+
+.t1 {
+  left: 10px;
+  transform: rotate(-10deg);
+}
+
+.t2 {
+  right: 10px;
+  transform: rotate(12deg);
+}
+
+/* 이름표 */
+.name {
+  position: relative;
+
+  display: inline-block;
+
+  margin: -4px 0 0 -4px;
+  padding: 5px 14px;
+
+  border: 2px solid #222;
+
+  font-family: "Baloo 2", sans-serif;
+  font-size: 17px;
+  font-weight: 700;
+
+  background: var(--yellow);
+
+  transform: rotate(-3deg);
+
+  z-index: 4;
+}
+
+/* 하단 */
+footer {
+  text-align: center;
+  padding: 4px 15px 20px;
+
+  color: #777;
+  font-size: 12px;
+}
+
+/* 모바일 */
+@media(max-width:720px) {
+
+  .cards {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 25px 16px;
+  }
+
+  .board {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+}
+
+@media(max-width:460px) {
+
+  .cards {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .title {
+    font-size: 16px;
+    padding: 9px 15px;
+  }
+
+  .name {
+    font-size: 14px;
+  }
+}
+</style>
+</head>
+
+
+<body>
+
+<div class="topbar"></div>
+
+<div class="site">
+
+  <!-- HEADER -->
+  <header>
+
+    <h1 class="brand">
+      the birthday keys
+    </h1>
+
+    <div class="nav">
+      <span>Home</span>
+      <span>Games</span>
+      <span class="active">Surprise</span>
+      <span>Memories</span>
+      <span>FAQ</span>
+    </div>
+
+  </header>
+
+
+  <!-- PINK BOARD -->
+  <main class="board">
+
+    <!-- 별 -->
+    <div class="confetti">
+      <i class="c1">★</i>
+      <i class="c2">★</i>
+      <i class="c3">✦</i>
+      <i class="c4">★</i>
+      <i class="c5">★</i>
+    </div>
+
+
+    <!-- 제목 -->
+    <div class="title">
+      MY FAVOURITE PEOPLE!
+    </div>
+
+
+    <div class="instructions">
+      ✨ 손가락이나 마우스로 긁어보세요! ✨
+    </div>
+
+
+    <!-- =========================
+         카드가 들어가는 부분
+         ========================= -->
+    <section class="cards" id="cards"></section>
+
+  </main>
+
+
+  <footer>
+    For the birthday girl ♡ Scratch every card and find your surprise!
+  </footer>
+
+</div>
+
+
+<script>
+
+/* ============================================================
+   ★★★★★ 여기만 수정하면 됨 ★★★★★
+
+   image 부분에 Base64 사진을 넣어주세요.
+
+   JPEG:
+   data:image/jpeg;base64,여기에_Base64
+
+   PNG:
+   data:image/png;base64,여기에_Base64
+
+   ============================================================ */
+
+
+const people = [
+  {
+    name: "1번 💟",
+    image: "./images/ㅅㅋㅇ.jpg",
+    bg: "#fff1a6",
+    rot: "-4deg"
+  },
+  {
+    name: "2번 💟",
+    image: "./images/ㅂㅂㄱ.jpg",
+    bg: "#bff1f7",
+    rot: "3deg"
+  },
+  {
+    name: "3번 💟",
+    image: "./images/ㄹㅋ.jpg",
+    bg: "#d9f5b8",
+    rot: "-2deg"
+  },
+  {
+    name: "4번 💟",
+    image: "./images/ㅇㅍ.jpg",
+    bg: "#ffd6ed",
+    rot: "4deg"
+  },
+  {
+    name: "5번 💟",
+    image: "./images/ㅇㅇㅅ.jpg",
+    bg: "#fff0b8",
+    rot: "-3deg"
+  },
+  {
+    name: "6번 💟",
+    image: "./images/ㅅㅂ.jpg",
+    bg: "#cfeaff",
+    rot: "2deg"
+  },
+  {
+    name: "7번 💟",
+    image: "./images/ㅅㄷ.jpg",
+    bg: "#e8d8ff",
+    rot: "-4deg"
+  }
+];
+
+
+
+/* ============================================================
+   카드 생성
+   ============================================================ */
+
+const cardsEl = document.getElementById("cards");
+
+
+people.forEach((person, index) => {
+
+  const card = document.createElement("article");
+
+  card.className = "card";
+
+  card.style.setProperty(
+    "--r",
+    person.rot
+  );
+
+
+  card.innerHTML = `
+
+    <div class="photo-frame">
+
+      <!-- 테이프 -->
+      <span class="tape t1"></span>
+      <span class="tape t2"></span>
+
+
+      <!-- ★ 실제 사진 ★ -->
+      <img
+        class="photo"
+        src="${person.image}"
+        alt="${person.name}"
+        style="background:${person.bg}"
+      >
+
+
+      <!-- 복권 긁기 영역 -->
+      <div
+        class="scratch-wrap"
+        id="scratch-${index}"
+      >
+
+        <!-- 긁기 전 -->
+        <div class="reveal">
+          SCRATCH<br>
+          ME! ✦
+        </div>
+
+        <!-- 은박 -->
+        <canvas></canvas>
+
+      </div>
+
+    </div>
+
+
+    <!-- 이름 -->
+    <div class="name">
+      ${person.name}
+    </div>
+
+  `;
+
+
+  cardsEl.appendChild(card);
+
+});
+
+
+/* ============================================================
+   복권 긁기 기능
+   ============================================================ */
+
+function setupScratch(wrap) {
+
+  const canvas =
+    wrap.querySelector("canvas");
+
+  const ctx =
+    canvas.getContext(
+      "2d",
+      {
+        willReadFrequently: true
+      }
+    );
+
+
+  let drawing = false;
+  let last = null;
+
+
+  /* 크기 설정 */
+  function resize() {
+
+    const rect =
+      wrap.getBoundingClientRect();
+
+
+    const dpr =
+      Math.min(
+        window.devicePixelRatio || 1,
+        2
+      );
+
+
+    canvas.width =
+      Math.max(
+        1,
+        Math.floor(rect.width * dpr)
+      );
+
+
+    canvas.height =
+      Math.max(
+        1,
+        Math.floor(rect.height * dpr)
+      );
+
+
+    canvas.style.width =
+      rect.width + "px";
+
+    canvas.style.height =
+      rect.height + "px";
+
+
+    ctx.setTransform(
+      dpr,
+      0,
+      0,
+      dpr,
+      0,
+      0
+    );
+
+
+    /* 은박 그라데이션 */
+
+    const gradient =
+      ctx.createLinearGradient(
+        0,
+        0,
+        rect.width,
+        rect.height
+      );
+
+
+    gradient.addColorStop(
+      0,
+      "#b7b7b7"
+    );
+
+    gradient.addColorStop(
+      0.25,
+      "#eeeeee"
+    );
+
+    gradient.addColorStop(
+      0.5,
+      "#9d9d9d"
+    );
+
+    gradient.addColorStop(
+      0.75,
+      "#f5f5f5"
+    );
+
+    gradient.addColorStop(
+      1,
+      "#a9a9a9"
+    );
+
+
+    ctx.fillStyle =
+      gradient;
+
+    ctx.fillRect(
+      0,
+      0,
+      rect.width,
+      rect.height
+    );
+
+
+    /* 은박에 작은 점 추가 */
+
+    ctx.fillStyle =
+      "rgba(255,255,255,.6)";
+
+
+    for (
+      let i = 0;
+      i < 40;
+      i++
+    ) {
+
+      const x =
+        Math.random() *
+        rect.width;
+
+      const y =
+        Math.random() *
+        rect.height;
+
+
+      ctx.beginPath();
+
+      ctx.arc(
+        x,
+        y,
+        1.5,
+        0,
+        Math.PI * 2
+      );
+
+      ctx.fill();
+    }
+
+  }
+
+
+  /* 마우스/손가락 위치 */
+
+  function getPoint(e) {
+
+    const rect =
+      canvas.getBoundingClientRect();
+
+
+    return {
+
+      x:
+        e.clientX -
+        rect.left,
+
+      y:
+        e.clientY -
+        rect.top
+
+    };
+
+  }
+
+
+  /* 긁기 */
+
+  function scratch(e) {
+
+    const point =
+      getPoint(e);
+
+
+    /*
+      기존 은박을 지움
+    */
+
+    ctx.globalCompositeOperation =
+      "destination-out";
+
+
+    /* 선 */
+
+    if (last) {
+
+      ctx.lineWidth = 28;
+
+      ctx.lineCap =
+        "round";
+
+      ctx.lineJoin =
+        "round";
+
+
+      ctx.beginPath();
+
+      ctx.moveTo(
+        last.x,
+        last.y
+      );
+
+      ctx.lineTo(
+        point.x,
+        point.y
+      );
+
+      ctx.stroke();
+
+    }
+
+
+    /* 원형으로 긁기 */
+
+    ctx.beginPath();
+
+    ctx.arc(
+      point.x,
+      point.y,
+      14,
+      0,
+      Math.PI * 2
+    );
+
+    ctx.fill();
+
+
+    last = point;
+
+
+    checkReveal();
+
+  }
+
+
+  /* 얼마나 긁었는지 확인 */
+
+  function checkReveal() {
+
+    const width =
+      canvas.width;
+
+    const height =
+      canvas.height;
+
+
+    const data =
+      ctx.getImageData(
+        0,
+        0,
+        width,
+        height
+      ).data;
+
+
+    let transparent = 0;
+
+    const step = 12;
+
+
+    for (
+      let y = 0;
+      y < height;
+      y += step
+    ) {
+
+      for (
+        let x = 0;
+        x < width;
+        x += step
+      ) {
+
+        const alpha =
+          data[
+            (y * width + x) * 4 + 3
+          ];
+
+
+        if (alpha < 80) {
+          transparent++;
+        }
+
+      }
+
+    }
+
+
+    const total =
+      Math.ceil(width / step) *
+      Math.ceil(height / step);
+
+
+    /*
+      58% 이상 긁으면
+      자동으로 완전 공개
+    */
+
+    if (
+      transparent / total > 0.58
+    ) {
+
+      wrap.classList.add(
+        "revealed"
+      );
+
+    }
+
+  }
+
+
+  /* ========================================================
+     마우스 이벤트
+     ======================================================== */
+
+  wrap.addEventListener(
+    "pointerdown",
+    function(e) {
+
+      drawing = true;
+
+      last = null;
+
+      wrap.setPointerCapture(
+        e.pointerId
+      );
+
+      scratch(e);
+
+    }
+  );
+
+
+  wrap.addEventListener(
+    "pointermove",
+    function(e) {
+
+      if (drawing) {
+        scratch(e);
+      }
+
+    }
+  );
+
+
+  wrap.addEventListener(
+    "pointerup",
+    function() {
+
+      drawing = false;
+
+      last = null;
+
+    }
+  );
+
+
+  wrap.addEventListener(
+    "pointercancel",
+    function() {
+
+      drawing = false;
+
+      last = null;
+
+    }
+  );
+
+
+  /* 처음 은박 생성 */
+
+  resize();
+
+
+  return resize;
+
+}
+
+
+/* ============================================================
+   모든 카드에 긁기 기능 적용
+   ============================================================ */
+
+const resizeFunctions = [];
+
+
+document
+  .querySelectorAll(".scratch-wrap")
+  .forEach(function(wrap) {
+
+    const resize =
+      setupScratch(wrap);
+
+    resizeFunctions.push(resize);
+
+  });
+
+
+/* 창 크기 바뀌면 다시 맞춤 */
+
+window.addEventListener(
+  "resize",
+  function() {
+
+    resizeFunctions.forEach(
+      function(fn) {
+        fn();
+      }
+    );
+
+  }
+);
+
+</script>
+
+</body>
+</html>
